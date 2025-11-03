@@ -1,0 +1,22 @@
+---
+- name: Update Debian/Ubuntu
+  hosts: debian
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Zorg dat apt cache recent is
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  tasks:
+    - name: Installeer updates
+      apt:
+        upgrade: dist
+        autoremove: true
+
+  handlers:
+    - name: Reboot indien nodig
+      reboot:
+        reboot_timeout: 1800
